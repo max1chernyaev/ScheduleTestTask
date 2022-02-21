@@ -1,9 +1,8 @@
 package com.example.scheduletesttask.web;
 
-import com.example.scheduletesttask.domain.Day;
-import com.example.scheduletesttask.repository.DayRepository;
+import com.example.scheduletesttask.domain.Group;
+import com.example.scheduletesttask.repository.GroupRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -22,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(DayController.class)
-public class DayControllerTest {
+@WebMvcTest(GroupController.class)
+public class GroupControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -32,25 +31,25 @@ public class DayControllerTest {
     ObjectMapper mapper;
 
     @MockBean
-    DayRepository dayRepository;
-    //@Ignore
+    GroupRepository groupRepository;
+
     @Test
-    public void saveDay_success() throws Exception{
-        Day day = Day.builder()
-                .name("Monday")
-                .dayId(1L)
+    public void saveGroup_success() throws Exception{
+        Group group = Group.builder()
+                .name("A")
+                .groupId(1L)
                 .build();
 
-        Mockito.when(dayRepository.save(day)).thenReturn(day);
+        Mockito.when(groupRepository.save(group)).thenReturn(group);
 
-        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/days")
+        MockHttpServletRequestBuilder mockRequest = MockMvcRequestBuilders.post("/api/groups")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content(this.mapper.writeValueAsString(day));
+                .content(this.mapper.writeValueAsString(group));
 
         mockMvc.perform(mockRequest)
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$", notNullValue()))
-                .andExpect(jsonPath("$.name", is("Monday")));
+                .andExpect(jsonPath("$.name", is("A")));
     }
 }
